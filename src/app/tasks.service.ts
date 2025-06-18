@@ -1,12 +1,14 @@
 import { Injectable, signal } from '@angular/core';
 import { Task } from './tasks/task.model';
 
-@Injectable({
-  providedIn: 'root' // where the service is available // other scopes: 'any', 'platform'
-})
+// @Injectable({
+//   providedIn: 'root' // where the service is available // other scopes: 'any', 'platform'
+// })
 export class TasksService {
 
-  private tasks = signal<Task[]>([]);
+  private tasks = signal<Task[]>([]); 
+
+  allTasks = this.tasks.asReadonly();
 
   addTask(taskData: {title: string, description: string}): void {
     const newTask: Task = {
@@ -18,22 +20,18 @@ export class TasksService {
     this.tasks.update((oldTasks) => [...oldTasks, newTask]);
   }
 
-  getTasks(): Task[] {
-    return this.tasks();
+  getTasks(){
+    return this.tasks.asReadonly();
   }
 
   deleteTask(task: Task): void {
     this.tasks.set(this.tasks().filter(each => each.id !== task.id));
   }
 
-  updateTaskStatus(taskId: string, status: 'OPEN' | 'IN_PROGRESS' | 'DONE'): void {
-    const updatedTaskList: Task[] = this.tasks().map(task => {
-    if (task.id === taskId) {
-      return { ...task, status };
-    }
-    return task;
-  });
-
-    this.tasks.set(updatedTaskList);
+  updateTaskStatus(taskId: string, status: 'OPEN' | 'IN_PROGRESS' | 'DONE') {
+    this.tasks.update((oldTasks)=>
+      oldTasks.map(each => 
+        each.id === taskId ? {...each, status: status} : each
+    ));
   }
 }

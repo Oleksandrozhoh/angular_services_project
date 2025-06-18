@@ -12,7 +12,13 @@ import { TasksService } from '../../tasks.service';
 export class NewTaskComponent {
   private formEl = viewChild<ElementRef<HTMLFormElement>>('form');
 
-  taskService = inject(TasksService);
+  private taskService = inject(TasksService); // inject the service with signals
+
+  // Alternative way to inject the service through the constructor
+  // private taskService: TasksService;
+  // constructor(tService: TasksService) {
+  //   this.taskService = tService;
+  // }
 
   onAddTask(title: string, description: string) {
     this.taskService.addTask({'title': title, 'description': description});
