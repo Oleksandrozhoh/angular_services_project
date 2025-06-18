@@ -1,6 +1,7 @@
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TasksService } from '../../tasks.service';
+import { TaskServiceToken } from '../../../main';
 
 @Component({
   selector: 'app-new-task',
@@ -12,7 +13,7 @@ import { TasksService } from '../../tasks.service';
 export class NewTaskComponent {
   private formEl = viewChild<ElementRef<HTMLFormElement>>('form');
 
-  private taskService = inject(TasksService); // inject the service with signals
+  private taskService = inject(TaskServiceToken); // inject the service with signals
 
   // Alternative way to inject the service through the constructor
   // private taskService: TasksService;
